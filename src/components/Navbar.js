@@ -6,9 +6,12 @@ export default function Navbar({ isLoggedIn, handleLogout }) {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-success">
-        <div className="container-fluid">
+        <div className="container-fluid d-flex align-items-center">
           {isLoggedIn ? (
-            <Link className="navbar-brand fs-3 fs-t fst-italic" to="/home">GoodFood</Link>
+            <>
+              <Link className="navbar-brand fs-3 fs-t fst-italic" to="/home">GoodFood</Link>
+              <Link className="nav-link text-white" to="/home" style={{ marginLeft: '10px' }}>Home</Link>
+            </>
           ) : (
             <span className="navbar-brand fs-3 fs-t fst-italic">GoodFood</span>
           )}
@@ -27,19 +30,14 @@ export default function Navbar({ isLoggedIn, handleLogout }) {
                   </li>
                 </>
               ) : (
-                <>
-                  <li className='nav-item'>
-                    <Link className="nav-link" aria-current="page" to="/home">Home</Link>
-                  </li>
-                  <li className='nav-item'>
-                    <button className="nav-link btn btn-link" onClick={handleLogout}>Logout</button>
-                  </li>
-                </>
+                <li className='nav-item'>
+                  <button className="nav-link btn btn-link" onClick={handleLogout}>Logout</button>
+                </li>
               )}
             </ul>
           </div>
         </div>
       </nav>
     </div>
-  )
+  );
 }

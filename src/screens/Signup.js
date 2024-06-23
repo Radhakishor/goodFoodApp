@@ -1,4 +1,3 @@
-// Signup.js
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -65,6 +64,7 @@ export default function Signup() {
                 throw new Error("User already exists. Please log in.");
             }
 
+            localStorage.setItem("authToken", json.authToken);
             navigate('/home');
         } catch (error) {
             setError(error.message);

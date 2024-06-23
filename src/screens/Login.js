@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -50,8 +49,8 @@ export default function Login() {
         throw new Error(json.errors);
       }
 
-      navigate("/home");
       localStorage.setItem("authToken", json.authToken);
+      navigate('/home');
     } catch (error) {
       setError(error.message);
     }
@@ -103,7 +102,7 @@ export default function Login() {
           <button type="submit" className="m-3 btn btn-primary">
             Submit
           </button>
-          <Link to="/createuser" className="m-3 btn btn-danger">
+          <Link to="/signup" className="m-3 btn btn-danger">
             I'm a new user
           </Link>
           {error && <p className="text-danger">{error}</p>}

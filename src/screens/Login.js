@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,15 @@ export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    if (localStorage.getItem("authToken")) {
+      setIsLoggedIn(true);
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const validateForm = () => {
     let valid = true;
@@ -64,7 +73,7 @@ export default function Login() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar isLoggedIn={isLoggedIn} />
       <div className="container">
         <form onSubmit={handleSubmit}>
           <div className="form-group col-md-4">

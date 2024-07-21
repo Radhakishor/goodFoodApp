@@ -145,7 +145,6 @@ export default function Home({ cart, setCart }) {
                         </div>
                     ))}
             </div>
-            <Cart cart={cart} />
             <Footer />
         </div>
     );

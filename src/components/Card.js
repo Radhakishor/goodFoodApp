@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 export default function Card(props) {
@@ -30,7 +31,7 @@ export default function Card(props) {
         if (selectedOption && quantity > 0) {
             const item = {
                 _id: props.id, // ensure you have the _id prop passed to Card component
-                name: props.foodName,
+                foodName: props.foodName,
                 option: selectedOption,
                 quantity: quantity,
                 customization: customization,
@@ -45,6 +46,7 @@ export default function Card(props) {
             alert("Please select a size option and quantity.");
         }
     };
+    
 
     const handleShowOptions = () => {
         setShowOptions(true);

@@ -63,17 +63,28 @@ export default function Home({ cart, setCart }) {
             clearInterval(interval);
         };
     }, []);
-
+    
     const addToCart = (item) => {
-        const existingItem = cart.find(cartItem => cartItem._id === item._id);
-        if (existingItem) {
-            existingItem.quantity += 1;
-            setCart([...cart]);
+        // Create a unique key for the item based on its name and selected options
+        const key = `${item.foodName}-${item.option}`;
+        
+        // Check if the item with the same name and option already exists in the cart
+        const existingItemIndex = cart.findIndex(cartItem => `${cartItem.foodName}-${cartItem.option}` === key);
+        
+        if (existingItemIndex !== -1) {
+            // If it exists, increment the quantity
+            const updatedCart = [...cart];
+            updatedCart[existingItemIndex].quantity += item.quantity;
+            setCart(updatedCart);
         } else {
-            setCart([...cart, { ...item, foodName: item.name, quantity: 1 }]);
+            // Otherwise, add the new item to the cart
+            setCart([...cart, item]);
         }
     };
-
+    
+    
+    
+    
     return (
         <div>
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} cartItemCount={cart.length} />

@@ -4,8 +4,9 @@ import Navbar from "../components/Navbar";
 import 'bootstrap/dist/css/bootstrap.css';
 import Card from "../components/Card";
 import { useNavigate } from 'react-router-dom';
+import Cart from './Cart'; // Import Cart component
 
-export default function Home() {
+export default function Home({ cart, setCart }) {
     const [search, setSearch] = useState("");
     const [foodCat, setFoodCat] = useState([]);
     const [foodItem, setFoodItem] = useState([]);
@@ -24,8 +25,8 @@ export default function Home() {
                 throw new Error('Failed to fetch data');
             }
             response = await response.json();
-            setFoodItem(response[0]);
-            setFoodCat(response[1]);
+            setFoodItem(response[0] || []);
+            setFoodCat(response[1] || []);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -41,7 +42,7 @@ export default function Home() {
     const handleLogout = () => {
         localStorage.removeItem("authToken");
         setIsLoggedIn(false);
-        navigate("/login"); // Redirect to login page after logout
+        navigate("/login");
     }
 
     const handleNextPrev = (direction) => {
@@ -56,16 +57,26 @@ export default function Home() {
     useEffect(() => {
         const interval = setInterval(() => {
             handleNextPrev('next');
-        }, 5000); // Change carousel item every 5 seconds
+        }, 5000);
 
         return () => {
             clearInterval(interval);
         };
-    }, []); // Run only once on component mount
+    }, []);
+
+    const addToCart = (item) => {
+        const existingItem = cart.find(cartItem => cartItem._id === item._id);
+        if (existingItem) {
+            existingItem.quantity += 1;
+            setCart([...cart]);
+        } else {
+            setCart([...cart, { ...item, foodName: item.name, quantity: 1 }]);
+        }
+    };
 
     return (
         <div>
-            <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} cartItemCount={cart.length} />
             <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-inner">
                     <div className="carousel-caption" style={{ zIndex: '10' }}>
@@ -84,7 +95,7 @@ export default function Home() {
                         <img src="https://st2.depositphotos.com/1027198/9484/i/950/depositphotos_94849016-stock-photo-one-pot-pasta.jpg" className="d-block w-100" alt="Pasta" style={{ maxHeight: '450px' }} />
                     </div>
                     <div className="carousel-item">
-                        <img src="https://www.licious.in/blog/wp-content/uploads/2016/07/Biryani-768x466.jpg" className="d-block w-100" alt="Pasta" style={{ maxHeight: '450px' }} />
+                        <img src="https://www.licious.in/blog/wp-content/uploads/2016/07/Biryani-768x466.jpg" className="d-block w-100" alt="Biryani" style={{ maxHeight: '450px' }} />
                     </div>
                     <div className="carousel-item active">
                         <img src="https://media.istockphoto.com/id/938742222/photo/cheesy-pepperoni-pizza.jpg?s=1024x1024&w=is&k=20&c=OKXH55QwDa6L3cY2pTTz1DKVT2clqW3zcVaJVaU-N_U=" className="d-block w-100" alt="Pizza" style={{ maxHeight: '450px' }} />
@@ -111,14 +122,20 @@ export default function Home() {
                                         item.name.toLowerCase().includes(search.toLowerCase())
                                     ).map(item => (
                                         <div key={item._id} className="col">
-                                            <Card foodName={item.name} options={item.options} imgSrc={item.img} />
+                                            <Card 
+                                                foodName={item.name} 
+                                                options={item.options} 
+                                                imgSrc={item.img} 
+                                                addToCart={addToCart}
+                                            />
                                         </div>
                                     ))}
                             </div>
                         </div>
                     ))}
             </div>
+            <Cart cart={cart} />
             <Footer />
         </div>
-    )
+    );
 }

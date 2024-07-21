@@ -29,6 +29,7 @@ export default function Card(props) {
     const handleAddToCart = () => {
         if (selectedOption && quantity > 0) {
             const item = {
+                _id: props.id, // ensure you have the _id prop passed to Card component
                 name: props.foodName,
                 option: selectedOption,
                 quantity: quantity,
@@ -55,8 +56,8 @@ export default function Card(props) {
 
     return (
         <div>
-            <div className="card mt-3" style={{ "width": "18rem", "maxHeight": "500px" }}>
-                <img src={props.imgSrc} className="card-img-top m-3" alt="..." style={{ 'height': '200px', 'width': '250px' }} />
+            <div className="card mt-3" style={{ width: "18rem", maxHeight: "500px" }}>
+                <img src={props.imgSrc} className="card-img-top m-3" alt="..." style={{ height: '200px', width: '250px' }} />
                 <div className="card-body row">
                     <h5 className="card-title">{props.foodName}</h5>
                     <div className="col-md-7">

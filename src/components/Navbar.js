@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
 
-export default function Navbar({ isLoggedIn, handleLogout }) {
+export default function Navbar({ isLoggedIn, handleLogout, cartItemCount }) {
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-success">
@@ -11,6 +11,7 @@ export default function Navbar({ isLoggedIn, handleLogout }) {
             <>
               <Link className="navbar-brand fs-3 fs-t fst-italic" to="/home">GoodFood</Link>
               <Link className="nav-link text-white" to="/home" style={{ marginLeft: '10px' }}>Home</Link>
+              <Link className="nav-link text-white" to="/cart" style={{ marginLeft: '10px' }}>Cart <span className="badge bg-primary">{cartItemCount}</span></Link>
             </>
           ) : (
             <span className="navbar-brand fs-3 fs-t fst-italic">GoodFood</span>

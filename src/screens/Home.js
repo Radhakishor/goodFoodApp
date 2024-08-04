@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar";
 import 'bootstrap/dist/css/bootstrap.css';
 import Card from "../components/Card";
 import { useNavigate } from 'react-router-dom';
-import Cart from './Cart'; // Import Cart component
 
 export default function Home({ cart, setCart }) {
     const [search, setSearch] = useState("");
@@ -65,19 +64,24 @@ export default function Home({ cart, setCart }) {
     }, []);
     
     const addToCart = (item) => {
-        // Create a unique key for the item based on its name and selected options
         const key = `${item.foodName}-${item.option}`;
-        
-        // Check if the item with the same name and option already exists in the cart
         const existingItemIndex = cart.findIndex(cartItem => `${cartItem.foodName}-${cartItem.option}` === key);
-        
+    
         if (existingItemIndex !== -1) {
-            // If it exists, increment the quantity
             const updatedCart = [...cart];
-            updatedCart[existingItemIndex].quantity += item.quantity;
+            const existingItem = updatedCart[existingItemIndex];
+            
+            // Update quantity and recalculate the price
+            existingItem.quantity += item.quantity;
+            const unitPrice = existingItem.price / (existingItem.quantity - item.quantity);
+            existingItem.price = unitPrice * existingItem.quantity; // Recalculate price
+            
+            // Update the cart with the new item
+            updatedCart[existingItemIndex] = existingItem;
             setCart(updatedCart);
         } else {
-            // Otherwise, add the new item to the cart
+            // Calculate price for the new item
+            item.price = item.price * item.quantity;
             setCart([...cart, item]);
         }
     };

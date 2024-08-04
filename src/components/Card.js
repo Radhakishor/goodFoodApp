@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 export default function Card(props) {
@@ -29,13 +28,14 @@ export default function Card(props) {
 
     const handleAddToCart = () => {
         if (selectedOption && quantity > 0) {
+            const itemPrice = props.options[0][selectedOption]; // Price per unit
             const item = {
-                _id: props.id, // ensure you have the _id prop passed to Card component
+                _id: props.id,
                 foodName: props.foodName,
                 option: selectedOption,
                 quantity: quantity,
                 customization: customization,
-                price: props.options[0][selectedOption] * quantity
+                price: itemPrice 
             };
             props.addToCart(item);
             setQuantity(0);
@@ -46,6 +46,8 @@ export default function Card(props) {
             alert("Please select a size option and quantity.");
         }
     };
+    
+    
     
 
     const handleShowOptions = () => {
@@ -69,41 +71,23 @@ export default function Card(props) {
                         {showOptions && (
                             <>
                                 <select className="form-select m-2" onChange={handleOptionChange} value={selectedOption}>
-                                    <option value="" disabled>Select Size</option>
-                                    {priceOptions.map((option) => (
-                                        <option key={option} value={option}>
-                                            {option} : ${options[option]}
-                                        </option>
+                                    <option value="" disabled>Select size</option>
+                                    {priceOptions.map((key) => (
+                                        <option key={key} value={key}>{key}</option>
                                     ))}
                                 </select>
-                                
-                                <div className="container d-flex align-items-center mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Add customization"
+                                    value={customization}
+                                    onChange={handleCustomizationChange}
+                                />
+                                <div className="d-flex justify-content-between align-items-center mt-2">
                                     <button className="btn btn-danger" onClick={decrementQuantity}>-</button>
-                                    <input
-                                        type="text"
-                                        className="form-control text-center mx-2"
-                                        value={quantity}
-                                        readOnly
-                                        style={{ width: '50px' }}
-                                    />
+                                    <span>{quantity}</span>
                                     <button className="btn btn-success" onClick={incrementQuantity}>+</button>
                                 </div>
-
-                                
-                                <input 
-                                    type="text" 
-                                    className="form-control m-2" 
-                                    placeholder="Customization (optional)" 
-                                    value={customization} 
-                                    onChange={handleCustomizationChange} 
-                                />
-                            </>
-                        )}
-                    </div>
-                    <div className="col-md-5">
-                        {selectedOption && quantity > 0 && (
-                            <>
-                                <h6>Total price: ${options[selectedOption] * quantity}</h6>
                                 <button className="btn btn-primary mt-2" onClick={handleAddToCart}>Confirm Add to Cart</button>
                             </>
                         )}
@@ -111,5 +95,5 @@ export default function Card(props) {
                 </div>
             </div>
         </div>
-    )
+    );
 }

@@ -33,7 +33,7 @@ function App() {
         {/* Protected routes */}
         <Route element={<PrivateRoute isLoggedIn={isLoggedIn} />}>
           <Route path='/home' element={<Home cart={cart} setCart={setCart} isLoggedIn={isLoggedIn} handleLogout={handleLogout} />} />
-          <Route path='/cart' element={<Cart cart={cart} handleLogout={handleLogout} isLoggedIn={isLoggedIn} />} />
+          <Route path='/cart' element={<Cart cart={cart} setCart={setCart} handleLogout={handleLogout} isLoggedIn={isLoggedIn} />} />
         </Route>
       </Routes>
     </Router>

@@ -28,7 +28,8 @@ export default function Card(props) {
 
     const handleAddToCart = () => {
         if (selectedOption && quantity > 0) {
-            const itemPrice = props.options[0][selectedOption]; // Price per unit
+            //test comment
+            const itemPrice = props.options[0][selectedOption]; // Price per unit 
             const item = {
                 _id: props.id,
                 foodName: props.foodName,

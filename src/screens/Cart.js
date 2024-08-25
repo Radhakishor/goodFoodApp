@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const Cart = ({ cart = [], setCart, handleLogout, isLoggedIn }) => {
+  const navigate = useNavigate();
+
   // Calculate total price
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
 
@@ -31,7 +34,7 @@ const Cart = ({ cart = [], setCart, handleLogout, isLoggedIn }) => {
   };
 
   const handleCheckout = () => {
-    alert("Proceed to Checkout clicked!");
+    navigate('/checkout');
   };
 
   return (
@@ -68,6 +71,6 @@ const Cart = ({ cart = [], setCart, handleLogout, isLoggedIn }) => {
       <Footer />
     </div>
   );
-}
+};
 
 export default Cart;

@@ -1,0 +1,22 @@
+
+/* FloatingCartButton.css */
+
+/* Ensure specificity to override Bootstrap styles */
+.btn-success.blink-border {
+    border: 4px solid #FFD700 !important; /* Gold border color */
+    animation: blink-border 1s infinite;
+}
+
+@keyframes blink-border {
+    0% {
+        border-color: #FFD700;
+    }
+    50% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: #FFD700;
+    }
+}
+
+

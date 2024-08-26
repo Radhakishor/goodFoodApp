@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 export default function Card(props) {
     const [quantity, setQuantity] = useState(0);
     const [selectedOption, setSelectedOption] = useState("");
     const [customization, setCustomization] = useState("");
     const [showOptions, setShowOptions] = useState(false);
+    const [buttonText, setButtonText] = useState("Add to Cart"); // New state for button text
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     const incrementQuantity = () => {
         setQuantity(prevQuantity => Math.min(prevQuantity + 1, 10)); // Set upper limit to 10
@@ -28,7 +31,6 @@ export default function Card(props) {
 
     const handleAddToCart = () => {
         if (selectedOption && quantity > 0) {
-            //test comment
             const itemPrice = props.options[0][selectedOption]; // Price per unit 
             const item = {
                 _id: props.id,
@@ -43,13 +45,24 @@ export default function Card(props) {
             setSelectedOption("");
             setCustomization("");
             setShowOptions(false);
+            setButtonText("View Cart"); // Change button text to "View Cart"
+            
+            // Revert back to "Add to Cart" after 5 seconds
+            setTimeout(() => {
+                setButtonText("Add to Cart");
+            }, 5000);
         } else {
             alert("Please select a size option and quantity.");
         }
     };
-    
-    
-    
+
+    const handleButtonClick = () => {
+        if (buttonText === "View Cart") {
+            navigate("/cart"); // Navigate to the cart page
+        } else {
+            handleShowOptions();
+        }
+    };
 
     const handleShowOptions = () => {
         setShowOptions(true);
@@ -67,7 +80,7 @@ export default function Card(props) {
                     <h5 className="card-title">{props.foodName}</h5>
                     <div className="col-md-7">
                         {!showOptions && (
-                            <button className="btn btn-primary mt-2" onClick={handleShowOptions}>Add to Cart</button>
+                            <button className="btn btn-primary mt-2" onClick={handleButtonClick}>{buttonText}</button>
                         )}
                         {showOptions && (
                             <>

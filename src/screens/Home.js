@@ -4,12 +4,14 @@ import Navbar from "../components/Navbar";
 import 'bootstrap/dist/css/bootstrap.css';
 import Card from "../components/Card";
 import { useNavigate } from 'react-router-dom';
+import FloatingCartButton from "../components/FloatingCartButton1"; // Import the FloatingCartButton
 
 export default function Home({ cart, setCart }) {
     const [search, setSearch] = useState("");
     const [foodCat, setFoodCat] = useState([]);
     const [foodItem, setFoodItem] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showBlink, setShowBlink] = useState(false); // State to control the blinking
     let navigate = useNavigate();
 
     const loadData = async () => {
@@ -62,7 +64,7 @@ export default function Home({ cart, setCart }) {
             clearInterval(interval);
         };
     }, []);
-    
+
     const addToCart = (item) => {
         const key = `${item.foodName}-${item.option}`;
         const existingItemIndex = cart.findIndex(cartItem => `${cartItem.foodName}-${cartItem.option}` === key);
@@ -71,28 +73,27 @@ export default function Home({ cart, setCart }) {
             const updatedCart = [...cart];
             const existingItem = updatedCart[existingItemIndex];
             
-            // Update quantity and recalculate the price
             existingItem.quantity += item.quantity;
             const unitPrice = existingItem.price / (existingItem.quantity - item.quantity);
-            existingItem.price = unitPrice * existingItem.quantity; // Recalculate price
+            existingItem.price = unitPrice * existingItem.quantity;
             
-            // Update the cart with the new item
             updatedCart[existingItemIndex] = existingItem;
             setCart(updatedCart);
         } else {
-            // Calculate price for the new item
             item.price = item.price * item.quantity;
             setCart([...cart, item]);
         }
+
+        setShowBlink(true); // Start blinking effect
+        setTimeout(() => setShowBlink(false), 5000); // Stop blinking after 5 seconds
     };
-    
-    
-    
-    
+
     return (
         <div>
+            <div>
             <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} cartItemCount={cart.length} />
             <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
+                {/* ... existing carousel code */}
                 <div className="carousel-inner">
                     <div className="carousel-caption" style={{ zIndex: '10' }}>
                         <div className="d-flex justify-content-center">
@@ -125,7 +126,9 @@ export default function Home({ cart, setCart }) {
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
+            </div>
             <div className="container mt-4">
+                {/* ... existing food categories and items code */}
                 {foodCat.length > 0 &&
                     foodCat.map((category) => (
                         <div className="mb-4" key={category._id}>
@@ -149,6 +152,7 @@ export default function Home({ cart, setCart }) {
                         </div>
                     ))}
             </div>
+            <FloatingCartButton cart={cart} showBlink={showBlink} /> {/* Pass showBlink state */}
             <Footer />
         </div>
     );
